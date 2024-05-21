@@ -15,6 +15,7 @@ def api_home(request,*args,**kwargs):
         print(e)
     print(request.headers)
     data['headers'] =  dict(request.headers)
+    data['params'] = dict(request.GET)
     return JsonResponse(data)
 
 """
