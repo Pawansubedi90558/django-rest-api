@@ -1,21 +1,17 @@
 from django.http import JsonResponse
 import json
+from products.models import Product
 
 def api_home(request,*args,**kwargs):
-    # print(request)
-    body = request.body #byte string of JSON data
-    values = request.GET
-    print(values)
-    # print(body)
-    data={}
-    try:
-        data= json.loads(body) #string of JSON data -> python dict
-        # print(data)
-    except Exception as e:
-        print(e)
-    print(request.headers)
-    data['headers'] =  dict(request.headers)
-    data['params'] = dict(request.GET)
+    model_data = Product.objects.all().order_by("?").first()
+    data = {}
+    if model_data:
+        #serialization is done below i.e. a model instance(model_data) is converted into python dictionary and then returned as JSON to the client
+        data['id'] =  model_data.id
+        data['check'] = True
+        data['title'] =  model_data.title
+        data['content'] = model_data.content
+        data['price'] =  model_data.price
     return JsonResponse(data)
 
 """
